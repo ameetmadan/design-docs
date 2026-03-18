@@ -1,11 +1,5 @@
 # Async Job Queue with Workers: Background Processing at Every Scale
 
----
-**Author:** Ameet Madan
-**Status:** Draft
-**Last Updated:** 18.03.2026
----
-
 ## TL;DR
 
 1. **Don't start with a message broker** — a jobs table in your existing DB is enough for hundreds of jobs per day and costs zero new infrastructure.
