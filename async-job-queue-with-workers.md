@@ -2,11 +2,15 @@
 
 ## TL;DR
 
-1. **Don't start with a message broker** — a jobs table in your existing DB is enough for hundreds of jobs per day and costs zero new infrastructure.
-2. **The job record is the contract** — keep the data model identical across all tiers so you can swap the transport layer (DB → Redis → broker) without touching worker logic.
-3. **Backpressure kills queues; fight it at every layer** — rate-limit producers, cap worker concurrency, use priority lanes, monitor depth, and expire stale jobs. No single control point is sufficient.
-4. **The sweeper is your crash recovery** — a separate process that requeues expired claims is what makes the system resilient to worker crashes without complex distributed coordination.
-5. **Exactly-once is a lie; design for it** — assume jobs will run more than once. Idempotency keys in handlers are cheaper and more reliable than trying to guarantee exactly-once delivery at the queue level.
+1. **Don't start with a message broker**: A jobs table in your existing DB is enough for hundreds of jobs per day and costs zero new infrastructure.
+
+2. **The job record is the contract**:  Keep the data model identical across all tiers so you can swap the transport layer (DB → Redis → broker) without touching worker logic.
+
+3. **Backpressure kills queues; fight it at every layer!** Rate-limit producers, cap worker concurrency, use priority lanes, monitor depth, and expire stale jobs. No single control point is sufficient.
+
+4. **A separate process ("The sweeper") that requeues expired claims** is what makes the system resilient to worker crashes without complex distributed coordination.
+
+5. **Exactly-once is a lie**. Design for it, assume jobs will run more than once. Idempotency keys in handlers are cheaper and more reliable than trying to guarantee exactly-once delivery at the queue level.
 
 ---
 
